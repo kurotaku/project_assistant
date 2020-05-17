@@ -1,0 +1,7 @@
+.git
+.dockerignore
+.byebug_history
+node_modules
+vendor/bundle
+log/*
+tmp/*

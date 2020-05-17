@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8
+    environment:
+      MYSQL_USER: deployer
+      MYSQL_PASSWORD: deployerpass
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: project_assistant_development
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./src/db/mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  web:
+    tty: true
+    stdin_open: true
+    command: bash /entrypoint.sh
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    links:
+      - db
+    tty: true
+    stdin_open: true
+    environment:
+      HOST: localhost
+      PORT: 3000
+      DB_USER: deployer
+      DB_PASSWORD: deployerpass
+      DB_HOST: db
+      DB_PORT: 3306
+      MAILHOG_DELIVERY: 'true'
