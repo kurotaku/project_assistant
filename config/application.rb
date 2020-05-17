@@ -37,7 +37,7 @@ module Myapp
                         helper_specs:     true,
                         controller_specs: true,
                         routing_specs:    false,
-                        request_specs:    true
+                        request_specs:    false
       # g.fixture_replacement :factory_bot, dir: "spec/factories"
     end
   end
